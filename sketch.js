@@ -1,57 +1,52 @@
-var binSide1,binSide2,binGround;
-var ground,paper;
-
 const Engine = Matter.Engine;
 const World = Matter.World;
 const Bodies = Matter.Bodies;
 const Body = Matter.Body;
+const Render = Matter.Render;
 
-function preload(){
-	
-}
+var dustbinObject, paperObject,groundObject;
+var world;
+
 
 function setup() {
-	createCanvas(800, 700);
+	createCanvas(1600, 700);
+	rectMode(CENTER);
+
+
 	engine = Engine.create();
 	world = engine.world;
-
-	//Create the Bodies Here.
-
-	binSide1=createSprite(550,610,20,100,{isStatic:true});
-	binSide2=createSprite(750,610,20,100,{isStatic:true});
-	binGround=createSprite(650,650,200,20,{isStatic:true});
-	binSide1.shapeColor=rgb(255);
-	binSide2.shapeColor=rgb(255);
-	binGround.shapeColor=rgb(255);
-
-	ground=createSprite(width/2, height-35, width,10);
-	ground=shapeColor=rgb(255,255);
-	paper=createSprite(ellipse(100,600,55,55));
-
+	dustbinObject=new Dustbin(1200,650);
+	paperObject=new paper(200,450,40);
+	groundObject=new ground(width/2,670,width,20);
+	
+	var render = Render.create({
+	  element: document.body,
+	  engine: engine,
+	  options: {
+	    width: 1200,
+	    height: 700,
+	    wireframes: false
+	  }
+	});
 
 	Engine.run(engine);
-  
-}
+ }
 
 
 function draw() {
   rectMode(CENTER);
   background(0);
+ 
+  dustbinObject.display();
+  paperObject.display();
+  groundObject.display();
   
-  drawSprites();
-  binSide1.display();
-  binSide2.display();
-  binGround.display();
-  paper.display();
-  
-  keyPressed(); 
 }
 
-
 function keyPressed() {
-	if (keyCode===UP_ARROW) {
-		Matter.Body.applyForce(paperObject.body.position,{x:85,y:85});
-	}
+  	if (keyCode === UP_ARROW) {
 
-
+    	Matter.Body.applyForce(paperObject.body,paperObject.body.position,{x:85,y:-85});
+    
+  	}
 }
